@@ -1,7 +1,31 @@
-/**
- * Implement Gatsby's Node APIs in this file.
- *
- * See: https://www.gatsbyjs.com/docs/node-apis/
- */
+exports.createPages = async ({ actions, graphql, reporter }) => {
+  const result = await graphql(`
+    {
+      allWpPost {
+        nodes {
+          id
+          uri
+        }
+      }
+    }
+  `)
 
-// You can delete this file if you're not using it
+  if (result.errors) {
+    reporter.error("There was an error fetching posts", result.errors)
+  }
+
+  const { allWpPost } = result.data
+
+  // Define the template to use
+  const template = require.resolve(`./src/templates/post.tsx`)
+
+  if (allWpPost.nodes.length) {
+    allWpPost.nodes.map(post => {
+      actions.createPage({
+        path: `/blog${post.uri}`,
+        component: template,
+        context: post,
+      })
+    })
+  }
+}

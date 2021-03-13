@@ -15,6 +15,12 @@ module.exports = {
       },
     },
     `gatsby-transformer-sharp`,
+    {
+      resolve: "gatsby-source-wordpress",
+      options: {
+        url: process.env.WORDPRESS_API_URL || "https://cms.moroz.dev/graphql",
+      },
+    },
     `gatsby-plugin-sharp`,
     {
       resolve: `gatsby-plugin-manifest`,
