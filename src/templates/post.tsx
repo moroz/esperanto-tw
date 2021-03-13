@@ -1,6 +1,7 @@
 import React from "react"
 import { graphql } from "gatsby"
 import { convertXNotation } from "../helpers/esperantoHelpers"
+import Layout from "../components/layout"
 
 interface Props {
   data: {
@@ -15,10 +16,12 @@ interface Props {
 const PostTemplate = ({ data: { wpPost } }: Props) => {
   const { id, title, content } = wpPost
   return (
-    <article className={`post-${id}`}>
-      <h1>{convertXNotation(title)}</h1>
-      <div dangerouslySetInnerHTML={{ __html: convertXNotation(content) }} />
-    </article>
+    <Layout>
+      <article className={`post-${id}`}>
+        <h1>{convertXNotation(title)}</h1>
+        <div dangerouslySetInnerHTML={{ __html: convertXNotation(content) }} />
+      </article>
+    </Layout>
   )
 }
 
