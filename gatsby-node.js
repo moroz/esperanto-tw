@@ -21,6 +21,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
 
   if (allWpPost.nodes.length) {
     allWpPost.nodes.map(post => {
+      console.log(post.uri)
       actions.createPage({
         path: `/blog${post.uri}`,
         component: template,
