@@ -7,44 +7,44 @@
 
 import * as React from "react"
 import PropTypes from "prop-types"
-import { useStaticQuery, graphql } from "gatsby"
+import messages from "../translations"
+import { IntlProvider } from "react-intl"
+import useLocale from "../hooks/useLocale"
 
-import Header from "./header"
+import Header from "./Header"
 import "../styles/app.sass"
 
 const Layout = ({ children }) => {
-  const data = useStaticQuery(graphql`
-    query SiteTitleQuery {
-      site {
-        siteMetadata {
-          title
-        }
-      }
-    }
-  `)
+  const { htmlLang, locale } = useLocale()
 
   return (
-    <div className="layout">
-      <Header siteTitle={data.site.siteMetadata?.title || `Title`} />
-      <div
-        style={{
-          margin: `0 auto`,
-          maxWidth: 960,
-          padding: `0 1.0875rem 1.45rem`,
-        }}
-      >
-        <main>{children}</main>
-        <footer
+    <IntlProvider
+      locale={locale}
+      messages={messages[locale]}
+      defaultLocale="eo"
+    >
+      <div className="layout" lang={htmlLang}>
+        <Header />
+        <div
           style={{
-            marginTop: `2rem`,
+            margin: `0 auto`,
+            maxWidth: 960,
+            padding: `0 1.0875rem 1.45rem`,
           }}
         >
-          © {new Date().getFullYear()}, Built with
-          {` `}
-          <a href="https://www.gatsbyjs.com">Gatsby</a>
-        </footer>
+          <main>{children}</main>
+          <footer
+            style={{
+              marginTop: `2rem`,
+            }}
+          >
+            © {new Date().getFullYear()}, Built with
+            {` `}
+            <a href="https://www.gatsbyjs.com">Gatsby</a>
+          </footer>
+        </div>
       </div>
-    </div>
+    </IntlProvider>
   )
 }
 

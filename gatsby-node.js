@@ -1,4 +1,23 @@
+const glob = require("glob")
+const path = require("path")
+
+const PREFIXED_LOCALES = ["en", "zh"]
+const PREFIXES = ["", "/en", "/zh"]
+
 exports.createPages = async ({ actions, graphql, reporter }) => {
+  glob.sync("src/pages/*.*").forEach(file => {
+    let { name } = path.parse(file)
+    if (name === "index") name = ""
+    const template = path.resolve(file)
+    PREFIXED_LOCALES.forEach(locale => {
+      const url = `/${locale}/${name}`
+      actions.createPage({
+        path: url,
+        component: template,
+      })
+    })
+  })
+
   const result = await graphql(`
     {
       allWpPost {
@@ -21,11 +40,12 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
 
   if (allWpPost.nodes.length) {
     allWpPost.nodes.map(post => {
-      console.log(post.uri)
-      actions.createPage({
-        path: `/blog${post.uri}`,
-        component: template,
-        context: post,
+      PREFIXES.forEach(prefix => {
+        actions.createPage({
+          path: `${prefix}/blog${post.uri}`,
+          component: template,
+          context: post,
+        })
       })
     })
   }
