@@ -10,7 +10,7 @@ interface Props {
 
 const HeaderLink = ({ children, messageId, href }: Props) => {
   return (
-    <Link to={href}>
+    <Link to={href} className="header__navlink">
       <FormattedMessage id={messageId} defaultMessage={children} />
     </Link>
   )
